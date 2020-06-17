@@ -13,10 +13,10 @@ window.Shop={
 
     },
 
-    addProductToCart:function(productId){
+    addProductToCart:function(customerId,productId){
         //TODO: read customerId dynamically in the future
       let request={
-          customerId: 1,
+          customerId:customerId,
           productsIds:[productId]
       };
       $.ajax({
@@ -34,15 +34,18 @@ window.Shop={
 
         $('.single-product-area .row:first-child').html(productsHtml);
     },
+    displayPhotoforProduct: function (product) {
+        return`<img src=${product.imageURL} alt="" class="single-shop-product"/>`
+    },
     getHtmlForOneProduct:function(product){
         return ` <div class="col-md-3 col-sm-6">
                     <div class="single-shop-product">
                         <div class="product-upper">
-                            <img src="img/product-2.jpg" alt="">
                         </div>
+                        <h1><a href="">${Shop.displayPhotoforProduct(product)}</a>
                         <h2><a href="">${product.name}</a></h2>
                         <div class="product-carousel-price">
-                            <ins>$${product.price}</ins> <del></del>
+                            <ins>$${product.salesPrice}</ins> <del></del>
                         </div>  
                         
                         <div class="product-option-shop">
@@ -51,14 +54,13 @@ window.Shop={
                     </div>
                 </div>`;
     },
-    bindEvents:function () {
+    bindEvents:function (){
         $('.single-product-area').delegate('.add_to_cart_button','click',function (event) {
             event.preventDefault();
+            let userId=$(this).data('user_id')
             let productId = $(this).data('product_id');
-            Shop.addProductToCart(productId);
-
+            Shop.addProductToCart(userId,productId);
         })
-
     }
 };
 Shop.getProducts();
